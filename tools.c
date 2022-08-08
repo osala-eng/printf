@@ -9,7 +9,7 @@
  */
 int _putchar(char c)
 {
-        return (write(1, &c, 1));
+	return (write(1, &c, 1));
 }
 
 /**
@@ -21,14 +21,14 @@ int _putchar(char c)
 
 void _puts(char *s)
 {
-        if (*s == END)
-        {
-                _putchar('\n');
-                return;
-        }
-        _putchar(*s);
-        s++;
-        _puts(s);
+	if (*s == END)
+	{
+		_putchar('\n');
+		return;
+	}
+	_putchar(*s);
+	s++;
+	_puts(s);
 }
 
 /**
@@ -39,10 +39,10 @@ void _puts(char *s)
 
 int _strlen(char *s)
 {
-        if (*s == END)
-                return (NULL);
-	        s++;
-        return (1 + _strlen(s));
+	if (*s == END)
+		return (0);
+	s++;
+	return (1 + _strlen(s));
 }
 
 /**
@@ -54,13 +54,11 @@ int _strlen(char *s)
  */
 char *_strcpy(char *dest, char *src)
 {
-        int len, i;
+	int len, i;
 
-        len = strlen(src);
-        for (i = 0; i <= len; i++)
-        {
-                dest[i] = src[i];
-        }
+	len = _strlen(src);
+	for (i = 0; i <= len; i++)
+		dest[i] = src[i];
 
-        return (dest);
+	return (dest);
 }

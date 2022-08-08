@@ -26,18 +26,18 @@ int _printf(const char *format, ...)
 {
 	va_list params;
 	int len = 0;
-	int totol_len = 0;
+	int total_len = 0;
 	int i = 0;
 	int j = 0;
 	char *buffer, *str;
 	char *(*f)(va_list);
 
 	if (!format)
-		RET_ERR;
+		return (-1);
 
 	buffer = create_buffer();
 	if (!buffer)
-		RET_ERR;
+		return (-1);
 
 	va_start(params, format);
 
@@ -59,7 +59,7 @@ int _printf(const char *format, ...)
 			{
 				len = check_buffer_overflow(buffer, len);
 				buffer[len++] = format[i];
-				total_len++
+				total_len++;
 			}
 			else
 			{
@@ -100,11 +100,11 @@ int _printf(const char *format, ...)
 	}
 
 	write_buffer(buffer, len, params);
-	return(total_len);
+	return (total_len);
 
 KILL:	va_end(params);
 	free(buffer);
-	RET_ERR;
+	return (-1);
 }
 
 
