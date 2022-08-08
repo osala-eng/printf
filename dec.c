@@ -48,6 +48,7 @@ char *print_d(va_list list)
 {
 	int length, div, n, temp;
 
+	
 	n = va_arg(list, int);
 	temp = n;
 	length = 0;
