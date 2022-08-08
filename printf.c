@@ -1,95 +1,86 @@
 #include "main.h"
 
 /**
- * check_buffer_overflow - if writing over buffer space,
- * print everything then revert length back to 0 to write at buffer start
- * @buffer: buffer holding string to print
- * @len: position in buffer
- * Return: length position
+ * clean - Peforms clean operations
+ * @params: va_list
+ * @output: A buffer_t struct.
  */
-int check_buffer_overflow(char *buffer, int len)
+void clean(va_list params, buffer_t *output)
 {
-	if (len > 1020)
-	{
-		write(1, buffer, len);
-		len = 0;
-	}
-	return (len);
+	va_end(params);
+	write(1, output->start, output->len);
+	free_buffer(output);
 }
 
 /**
- * _printf - mini printf version
- * @format: initial string with all identifiers
- * Return: strings with identifiers expanded
+ * print - Reads through the format string
+ * @format: Character string to print
+ * @output: A buffer_t struct containing a buffer.
+ * @params: A va_list of arguments.
+ *
+ * Return: The number of characters
  */
-int _printf(const char *format, ...)
+int print(const char *format, va_list params, buffer_t *output)
 {
-	va_list params;
-	int len = 0, total_len = 0, i = 0, j = 0;
-	char *buffer, *str, *(*f)(va_list);
+	int i, wid, prec, ret = 0;
+	char tmp;
+	unsigned char flags, len;
+	unsigned int (*f)(va_list, buffer_t *, unsigned char,
+			int, int, unsigned char);
 
-	buffer = create_buffer();
-	if (!format || !buffer)
-		return (-1);
-	va_start(params, format);
-	while (format[i])
+	for (i = 0; *(format + i); i++)
 	{
-		if (format[i] != '%')
+		len = 0;
+		if (*(format + i) == '%')
 		{
-			len = check_buffer_overflow(buffer, len);
-			buffer[len++] = format[i++];
-			total_len++;
-		}
-		else
-		{
-			i++;
-			if (format[i] == END)
-				goto KILL;
-			if (format[i] == '%')
+			tmp = 0;
+			flags = handle_flags(format + i + 1, &tmp);
+			wid = handle_width(params, format + i + tmp + 1, &tmp);
+			prec = handle_precision(params, format + i + tmp + 1,
+					&tmp);
+			len = handle_length(format + i + tmp + 1, &tmp);
+
+			f = handle_specifiers(format + i + tmp + 1);
+			if (f)
 			{
-				len = check_buffer_overflow(buffer, len);
-				buffer[len++] = format[i];
-				total_len++;
+				i += tmp + 1;
+				ret += f(params, output, flags, wid, prec, len);
+				continue;
 			}
-			else
+			else if (!*(format + i + tmp + 1))
 			{
-				f = get_func(format[i]);
-				if (!f)
-				{
-					len = check_buffer_overflow(buffer, len);
-					buffer[len++] = '%';
-					total_len++;
-					buffer[len++] = format[i];
-					total_len++;
-				}
-				else
-				{
-					str = f(params);
-					if (!str)
-						goto KILL;
-					if (format[i] == 'c' && !str[0])
-					{
-						len = check_buffer_overflow(buffer, len);
-						buffer[len++] = END;
-						total_len++;
-					}
-					j = 0;
-					while (str[j])
-					{
-						len = check_buffer_overflow(buffer, len);
-						buffer[len++] = str[j];
-						total_len++;
-						j++;
-					}
-					free(str);
-				}
+				ret = -1;
+				break;
 			}
-			i++;
 		}
+		ret += _memcpy(output, (format + i), 1);
+		i += (len != 0) ? 1 : 0;
 	}
-	write_buffer(buffer, len, params);
-	return (total_len);
-KILL:	va_end(params);
-	free(buffer);
-	return (-1);
+	clean(params, output);
+	return (ret);
+}
+
+/**
+ * samp - Outputs a formatted string.
+ * @format: Character string to print
+ *
+ * Return: The number of characters
+ */
+int samp(const char *format, ...)
+{
+	buffer_t *output;
+	va_list params;
+	int ret;
+
+	if (!format)
+		return (-1);
+	output = init_buffer();
+	if (!output)
+		return (-1);
+
+	va_start(params, format);
+
+	ret = print(format, params, output);
+
+	return (ret);
 }
