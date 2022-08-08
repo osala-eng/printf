@@ -5,23 +5,23 @@
  * @i: func key
  * Return: Pointer to function
  */
-char *(*get_func(char *i))(va_list)
+char *(*get_func(char i))(va_list)
 {
-        int k = 0;
+	int k = 0;
 
-        print keys[] = {
-                {"c", print_c},
-                {"s", print_s},
-                {NULL, NULL}
-        };
+	print keys[] = {
+	{'c', print_c},
+	{'s', print_s},
+	{END, NULL}
+	};
 
-        while (keys[k].id)
-        {
-                if (keys[k].id == i)
-                        return (keys[k].func);
-                k++;
-        }
-        return (NULL);
+	while (keys[k].id)
+	{
+	if (keys[k].id == i)
+	return (keys[k].func);
+	k++;
+	}
+	return (NULL);
 }
 
 /**
@@ -30,12 +30,12 @@ char *(*get_func(char *i))(va_list)
  */
 char *create_buffer(void)
 {
-        char *buffer;
+	char *buffer;
 
-        buffer = malloc(sizeof(char) * 1024);
-        if (!buffer)
-                return (NULL);
-        return (buffer);
+	buffer = malloc(sizeof(char) * 1024);
+	if (!buffer)
+	return (NULL);
+	return (buffer);
 }
 
 
@@ -43,15 +43,15 @@ char *create_buffer(void)
  * write_buffer - prints buffer, then frees it and frees va_list
  * @buffer: buffer holding print-ables
  * @len: length of print-able string
- * @list: va_list
+ * @params: va_list
  */
 void write_buffer(char *buffer, int len, va_list params)
 {
-        char *buff;
+	char *buff;
 
-        buff = realloc(buffer, len);
-        write(1, buff, len);
+	buff = realloc(buffer, len);
+	write(1, buff, len);
 
-        free(buff);
-        va_end(params);
+	free(buff);
+	va_end(params);
 }

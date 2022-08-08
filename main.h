@@ -2,10 +2,11 @@
 #define _MAIN_H
 
 #define END '\0'
-#define RET_ERR (return (-1))
+#define RET_ERR (return(-1))
 
 #include <unistd.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 /**
  * _putchar - writes the character c to stdout
@@ -70,7 +71,7 @@ char *_strcpy(char *dest, char *src);
  * @i: func key
  * Return: Pointer to function
  */
-char* (*get_func(char i))(va_list);
+char *(*get_func(char i))(va_list);
 
 /**
  * create_buffer - creates buffer to hold string
@@ -95,7 +96,7 @@ void write_buffer(char *buffer, int len, va_list params);
 
 typedef struct types
 {
-        char *id;
+        char id;
         char* (*func)(va_list);
 } print;
 #endif
