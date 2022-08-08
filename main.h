@@ -2,7 +2,6 @@
 #define _MAIN_H
 
 #define END '\0'
-#define RET_ERR (return(-1))
 
 #include <unistd.h>
 #include <stdarg.h>
@@ -66,12 +65,13 @@ int _strlen(char *s);
  */
 char *_strcpy(char *dest, char *src);
 
-/**
+/*
  * get_func - returns needed function
  * @i: func key
  * Return: Pointer to function
  */
 char *(*get_func(char i))(va_list);
+
 
 /**
  * create_buffer - creates buffer to hold string
@@ -83,7 +83,7 @@ char *create_buffer(void);
  * write_buffer - prints buffer, then frees it and frees va_list
  * @buffer: buffer holding print-ables
  * @len: length of print-able string
- * @list: va_list
+ * @params: va_list
  */
 void write_buffer(char *buffer, int len, va_list params);
 
@@ -96,7 +96,7 @@ void write_buffer(char *buffer, int len, va_list params);
 
 typedef struct types
 {
-        char id;
-        char* (*func)(va_list);
+	char id;
+	char* (*func)(va_list);
 } print;
 #endif
