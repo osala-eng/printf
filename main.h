@@ -1,118 +1,110 @@
 #ifndef _MAIN_H
 #define _MAIN_H
 
-#define END '\0'
-
-#include <unistd.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <unistd.h>
+
+#define PLUS 1
+#define SPACE 2
+#define HASH 4
+#define ZERO 8
+#define NEG 16
+#define PLUS_FLAG (flags & 1)
+#define SPACE_FLAG ((flags >> 1) & 1)
+#define HASH_FLAG ((flags >> 2) & 1)
+#define ZERO_FLAG ((flags >> 3) & 1)
+#define NEG_FLAG ((flags >> 4) & 1)
+
+#define SHORT 1
+#define LONG 2
 
 /**
- * _putchar - writes the character c to stdout
- * @c: The character to print
- *
- * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
+ * struct buffer_s - A new type defining a buffer struct.
+ * @buffer: A pointer to a character array.
+ * @start: A pointer to the start of buffer.
+ * @len: The length of the string stored in buffer.
  */
-int _putchar(char c);
+typedef struct buffer_s
+{
+	char *buffer;
+	char *start;
+	unsigned int len;
+} buffer_t;
 
 /**
- * _puts - print a string using recursion
- * @s: String to print
- *
- * Return: void
+ * struct converter_s - A new type defining a converter struct.
+ * @specifier: A character representing a conversion specifier.
+ * @func: A pointer to a conversion function corresponding to specifier.
  */
-
-void _puts(char *s);
+typedef struct converter_s
+{
+	unsigned char specifier;
+	unsigned int (*func)(va_list, buffer_t *,
+			unsigned char, int, int, unsigned char);
+} converter_t;
 
 /**
- * _printf - printf function
- * @format: directives
- *
- * Return: Always 0 (Success)
+ * struct flag_s - A new type defining a flags struct.
+ * @flag: A character representing a flag.
+ * @value: The integer value of the flag.
  */
+typedef struct flag_s
+{
+	unsigned char flag;
+	unsigned char value;
+} flag_t;
+
 int _printf(const char *format, ...);
 
-/**
- * print_c - handle char as string
- * @params: char
- * Return: String verion of char
- */
-char *print_c(va_list params);
+unsigned int convert_c(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_s(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_di(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_percent(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_b(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_u(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_o(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_x(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_X(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_S(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_p(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_r(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_R(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
 
-/**
- * print_s - handle printing a string
- * @params: params
- * Return: string
- */
+unsigned char handle_flags(const char *flags, char *index);
+unsigned char handle_length(const char *modifier, char *index);
+int handle_width(va_list args, const char *modifier, char *index);
+int handle_precision(va_list args, const char *modifier, char *index);
+unsigned int (*handle_specifiers(const char *specifier))(va_list, buffer_t *,
+		unsigned char, int, int, unsigned char);
 
-char *print_s(va_list params);
+unsigned int print_width(buffer_t *output, unsigned int printed,
+		unsigned char flags, int wid);
+unsigned int print_string_width(buffer_t *output,
+		unsigned char flags, int wid, int prec, int size);
+unsigned int print_neg_width(buffer_t *output, unsigned int printed,
+		unsigned char flags, int wid);
 
-/**
- * _strlen - return string length
- * @s: string
- * Return: string length
- */
+buffer_t *init_buffer(void);
+void free_buffer(buffer_t *output);
+unsigned int _memcpy(buffer_t *output, const char *src, unsigned int n);
+unsigned int convert_sbase(buffer_t *output, long int num, char *base,
+		unsigned char flags, int wid, int prec);
+unsigned int convert_ubase(buffer_t *output, unsigned long int num, char *base,
+		unsigned char flags, int wid, int prec);
 
-int _strlen(char *s);
-
-/**
- * _strcpy - copy string
- * @dest: destination
- * @src: source
- *
- * Return: Character
- */
-char *_strcpy(char *dest, char *src);
-
-/*
- * get_func - returns needed function
- * @i: func key
- * Return: Pointer to function
- */
-char *(*get_func(char i))(va_list);
-
-
-/**
- * create_buffer - creates buffer to hold string
- * Return: pointer to buffer
- */
-char *create_buffer(void);
-
-/**
- * write_buffer - prints buffer, then frees it and frees va_list
- * @buffer: buffer holding print-ables
- * @len: length of print-able string
- * @params: va_list
- */
-void write_buffer(char *buffer, int len, va_list params);
-
-
-/**
- * _itos - makes an int a string
- * @div: multiple of 10
- * @length: length of number
- * @n: number to convert to string
- * Return: string
- **/
-char *_itos(int div, int length, int n);
-
-/**
- * print_d - gets length to put in _itos
- * @list: takes arg
- * Return: integar string
- **/
-char *print_d(va_list list);
-
-/**
- * struct types - types
- * @id: key
- * @func: ptr to func
- */
-
-typedef struct types
-{
-	char id;
-	char* (*func)(va_list);
-} print;
-#endif
+#endif /* _MAIN_H */
