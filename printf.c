@@ -61,12 +61,12 @@ int print(const char *format, va_list params, buffer_t *output)
 }
 
 /**
- * samp - Outputs a formatted string.
+ * _printf - Outputs a formatted string.
  * @format: Character string to print
  *
  * Return: The number of characters
  */
-int samp(const char *format, ...)
+int _printf(const char *format, ...)
 {
 	buffer_t *output;
 	va_list params;
