@@ -6,13 +6,6 @@
 #include <unistd.h>
 #include <stdarg.h>
 
-/*
- * Verah
- * _putchar
- * _puts
- * _printf
- */
-
 /**
  * _putchar - writes the character c to stdout
  * @c: The character to print
