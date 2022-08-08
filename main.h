@@ -89,6 +89,22 @@ void write_buffer(char *buffer, int len, va_list params);
 
 
 /**
+ * _itos - makes an int a string
+ * @div: multiple of 10
+ * @length: length of number
+ * @n: number to convert to string
+ * Return: string
+ **/
+char *_itos(int div, int length, int n);
+
+/**
+ * print_d - gets length to put in _itos
+ * @list: takes arg
+ * Return: integar string
+ **/
+char *print_d(va_list list);
+
+/**
  * struct types - types
  * @id: key
  * @func: ptr to func
