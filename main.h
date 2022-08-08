@@ -2,6 +2,7 @@
 #define _MAIN_H
 
 #define END '\0'
+#define RET_ERR (return (-1))
 
 #include <unistd.h>
 #include <stdarg.h>
