@@ -25,22 +25,13 @@ int check_buffer_overflow(char *buffer, int len)
 int _printf(const char *format, ...)
 {
 	va_list params;
-	int len = 0;
-	int total_len = 0;
-	int i = 0;
-	int j = 0;
-	char *buffer, *str;
-	char *(*f)(va_list);
-
-	if (!format)
-		return (-1);
+	int len = 0, total_len = 0, i = 0, j = 0;
+	char *buffer, *str, *(*f)(va_list);
 
 	buffer = create_buffer();
-	if (!buffer)
+	if (!format || !buffer)
 		return (-1);
-
 	va_start(params, format);
-
 	while (format[i])
 	{
 		if (format[i] != '%')
@@ -49,7 +40,6 @@ int _printf(const char *format, ...)
 			buffer[len++] = format[i++];
 			total_len++;
 		}
-
 		else
 		{
 			i++;
@@ -77,7 +67,6 @@ int _printf(const char *format, ...)
 					str = f(params);
 					if (!str)
 						goto KILL;
-
 					if (format[i] == 'c' && !str[0])
 					{
 						len = check_buffer_overflow(buffer, len);
@@ -98,13 +87,9 @@ int _printf(const char *format, ...)
 			i++;
 		}
 	}
-
 	write_buffer(buffer, len, params);
 	return (total_len);
-
 KILL:	va_end(params);
 	free(buffer);
 	return (-1);
 }
-
-
