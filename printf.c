@@ -1,44 +1,50 @@
 #include "main.h"
+
 /**
- *_printf - function to print anything
- *@format: types of argument passed to the function
- *
- *Return: number of cs printed
+ * _printf - is a function that selects the correct function to print.
+ * @format: identifier to look for.
+ * Return: the length of the string.
  */
-int _printf(const char *format, ...)
+int _printf(const char * const format, ...)
 {
-	int check = 0, i;
+	format_t opt[] = {
+		{"%s", print_s},
+		{"%c", print_c},
+		{"%%", print_a},
+		{"%i", print_i},
+		{"%d", print_d},
+		{"%r", print_r},
+		{"%R", print_R},
+		{"%b", print_b},
+		{"%u", print_u},
+		{"%o", print_o},
+		{"%x", print_h},
+		{"%X", print_H},
+		{"%S", print_S},
+		{"%p", print_p}
+	};
 	va_list params;
-	int (*func)(va_list);
+	int i = 0, j, len = 0;
 
 	va_start(params, format);
-	if (!format)
+	if (!format || (format[0] == '%' && !format[1]))
 		return (-1);
-
-	for (i = 0; format[i]; i++)
+RESET:
+	while (format[i])
 	{
-		if (format[i] == '%')
+		j = 13;
+		while (j >= 0)
 		{
-			i++;
-			if (!(format[i]))
-				return (-1);
-
-			func = get_func(format[i]);
-			if (!func)
+			if (opt[j].id[0] == format[i] && opt[j].id[1] == format[i + 1])
 			{
-				_putchar('%');
-				_putchar(format[i]);
-				check += 2;
-			}
-			else
-				check += func(params);
+				len += opt[j].meth(params);
+				i = i + 2;
+				goto RESET;
+			} j--;
 		}
-		else
-		{
-			_putchar(format[i]);
-			check++;
-		}
-	}
-	va_end(params);
-	return (check);
+		_putc(format[i]);
+		len++;
+		i++;
+	} va_end(params);
+	return (len);
 }

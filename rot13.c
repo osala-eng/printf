@@ -1,40 +1,37 @@
 #include "main.h"
-
 /**
- * rot13 - convert ROT13 to text
- * @params: argument
+ * print_R - printf str to ROT13 place into buffer
+ * @params: type struct va_arg where is allocated printf arguments
+ * Return: counter
  *
- * Return: number of cs to be print
  */
-
-int rot13(va_list params)
+int print_R(va_list params)
 {
-	char ch[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	char chs[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
-	unsigned int i = 0, j = 0;
-	int s;
-	char *str;
+	int i, j, counter = 0;
+	int k = 0;
+	char *s = va_arg(params, char*);
+	char alpha[] = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+	char beta[] = {"nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM"};
 
-	s = 0;
-	str = va_arg(params, char *);
-	if (!str)
-		str = "(NULL)";
-	for (i = 0; str[i] != END; i++)
+	if (!s)
+		s = "(null)";
+	for (i = 0; s[i]; i++)
 	{
-		for (j = 0; ch[j] != END; j++)
+		k = 0;
+		for (j = 0; alpha[j] && !k; j++)
 		{
-			if (ch[j] == str[i])
+			if (s[i] == alpha[j])
 			{
-				_putchar(chs[j]);
-				s++;
-				break;
+				_putc(beta[j]);
+				counter++;
+				k = 1;
 			}
 		}
-		if (ch[j] == END)
+		if (!k)
 		{
-			_putchar(str[i]);
-			s++;
+			_putc(s[i]);
+			counter++;
 		}
 	}
-	return (s);
+	return (counter);
 }
