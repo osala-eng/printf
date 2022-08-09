@@ -1,45 +1,37 @@
 #ifndef _MAIN_H
 #define _MAIN_H
 
-#define BUFSIZE MAXLENGTH
-#define END '\0'
+#include <stdarg.h> /* va_list */
+#include <stdlib.h> /* malloc, free */
+#include <unistd.h> /* write */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <limits.h>
-#include <string.h>
+/* helper functions */
+char* (*get_func(char i))(va_list);
+char *create_buffer(void);
+void write_buffer(char *buffer, int len, va_list list);
+char *_strcpy(char *dest, char *src);
+int _strlen(char *s);
 
-int _putchar(char c);
+/* printf functions */
 int _printf(const char *format, ...);
-int print_c(va_list params);
-int print_s(va_list params);
-int print_p(__attribute__((unused))va_list params);
-int print_i(va_list params);
-int print_d(va_list params);
-int (*get_func(const char a))(va_list);
-int print_i(va_list params);
-int print_d(va_list params);
-int bin_r(unsigned int num, int len);
-int print_b(va_list params);
-int print_u(va_list params);
-int print_o(va_list args);
-int rot13(va_list params);
-int print_rev(va_list params);
-
-void rev_string(char *s);
+char *print_s(va_list list);
+char *print_c(va_list list);
+char *print_d(va_list list);
+char *itob(va_list list);
+char *rot13(va_list list);
+char *rev_string(va_list list);
+char *itoOctal(va_list list);
 
 /**
- *struct format - structure for printing various types
- *@select: type to print
- *@meth: function to print
+ * struct types - struct
+ * @id: identifier of type to print (e.g. c means char)
+ * @func: ptr to functions that print according to identifier (e.g. print_c)
  */
 
-typedef struct format
+typedef struct types
 {
-	const char select;
-	int (*meth)(va_list);
-} format_t;
+	char id;
+	char* (*func)(va_list);
+} print;
 
 #endif

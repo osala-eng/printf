@@ -1,40 +1,39 @@
 #include "main.h"
-
 /**
- * rot13 - convert ROT13 to text
- * @params: argument
- *
- * Return: number of cs to be print
+ * rot13 - encrypts string with rot13
+ * @list: string to change
+ * Return: modified string
  */
-
-int rot13(va_list params)
+char *rot13(va_list list)
 {
-	char ch[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	char chs[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
-	unsigned int i = 0, j = 0;
-	int s;
+	int i = 0;
 	char *str;
+	char *nstr;
 
-	s = 0;
-	str = va_arg(params, char *);
-	if (!str)
-		str = "(NULL)";
-	for (i = 0; str[i] != END; i++)
+	/* store va_arg to only access argument once */
+	str = va_arg(list, char *);
+
+	/* malloc new variable to assign over new rot13 characters */
+	nstr = malloc(sizeof(char) * (_strlen(str) + 1));
+	if (nstr == NULL)
+		return (NULL);
+
+	/* iterate str and assign rot13 char to nstr */
+	while (str[i] != '\0')
 	{
-		for (j = 0; ch[j] != END; j++)
+		if ((str[i] >= 'a' && str[i] <= 'm') || (str[i] >= 'A' && str[i] <= 'M'))
 		{
-			if (ch[j] == str[i])
-			{
-				_putchar(chs[j]);
-				s++;
-				break;
-			}
+			nstr[i] = str[i] + 13;
 		}
-		if (ch[j] == END)
+		else if ((str[i] >= 'n' && str[i] <= 'z') || (str[i] >= 'N' && str[i] <= 'Z'))
 		{
-			_putchar(str[i]);
-			s++;
+			nstr[i] = str[i] - 13;
 		}
+		else
+			(nstr[i] = str[i]);
+		i++;
 	}
-	return (s);
+	nstr[i] = '\0';
+
+	return (nstr);
 }

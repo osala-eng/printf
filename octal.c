@@ -1,43 +1,48 @@
 #include "main.h"
+
 /**
- * print_o - prints the octal representation of a decimal number
- * @params: argument
- *
- * Return: number of cs printed
+ * itoOctal - change int to octal
+ * @list: int to change
+ * Return: string with octal
  */
 
-int print_o(va_list params)
+char *itoOctal(va_list list)
 {
-	int j = 0;
-	unsigned int num = va_arg(params, unsigned int);
-	int arr[sizeof(int) * 8 + 1];
-	int i = 0;
+	int j = 0, eights = 1;
+	int i, k;
+	char *s;
 
-	if (num < 8)
+	k = va_arg(list, int);
+	i = k;
+
+	/* malloc up to max int in octal*/
+	s = malloc(sizeof(char) * 12);
+	if (s == NULL)
+		return (NULL);
+
+	if (k < 0)
 	{
-		_putchar(num + '0');
+		s[0] = 1 + '0';
 		j++;
-		return (j);
+		k *= -1;
+		i *= -1;
 	}
 
-	else
+	/* find biggest power of 8 it's divisible by */
+	while (k > 1)
 	{
-		while (num > 8)
-		{
-			arr[i] = num % 8;
-			num /= 8;
-			i++;
-		}
-
-		if (num < 8)
-			arr[i] = num;
-
-		while (i >= 0)
-		{
-			_putchar(arr[i] + '0');
-			j++;
-			i--;
-		}
+		k /= 8;
+		eights *= 8;
 	}
-	return (j);
+
+	/* divide down and store octal num */
+	while (eights > 0)
+	{
+		s[j++] = (i / eights + '0');
+		i %= eights;
+		eights /= 8;
+	}
+	s[j] = '\0';
+
+	return (s);
 }
