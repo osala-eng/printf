@@ -13,7 +13,7 @@
 
 /**
  * struct format - struct
- * @id: operation selector 
+ * @id: operation selector
  * @meth: method
  */
 
