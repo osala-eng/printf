@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <limits.h>
+#include <string.h>
 
 int _putchar(char c);
 int _printf(const char *format, ...);
@@ -25,6 +26,9 @@ int print_b(va_list params);
 int print_u(va_list params);
 int print_o(va_list args);
 int rot13(va_list params);
+int print_rev(va_list params);
+
+void rev_string(char *s);
 
 /**
  *struct format - structure for printing various types

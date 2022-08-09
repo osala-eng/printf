@@ -20,6 +20,7 @@ int (*get_func(const char a))(va_list)
 		{'b', print_b},
 		{'u', print_u},
 		{'o', print_o},
+		{'r', print_rev},
 		{'R', rot13},
 		{END, NULL}
 	};
