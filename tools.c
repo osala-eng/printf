@@ -16,8 +16,8 @@ int print_rev(va_list params)
 
 	len = strlen(str) - 1;
 
-	for (count = len; str[count]; count--)
+	for (count = len; count > 0; count--)
 		_putchar(str[count]);
 
-	return (len);
+	return (len++);
 }
