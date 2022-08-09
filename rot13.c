@@ -1,39 +1,38 @@
 #include "main.h"
 /**
- * rot13 - encrypts string with rot13
- * @list: string to change
- * Return: modified string
+ * rot13 - encrypts sing with rot13
+ * @list: sing to change
+ * Return: modified sing
  */
 char *rot13(va_list list)
 {
 	int i = 0;
-	char *str;
-	char *nstr;
+	char *s, *ns;
 
 	/* store va_arg to only access argument once */
-	str = va_arg(list, char *);
+	s = va_arg(list, char *);
 
 	/* malloc new variable to assign over new rot13 characters */
-	nstr = malloc(sizeof(char) * (_strlen(str) + 1));
-	if (nstr == NULL)
+	ns = malloc(sizeof(char) * (_slen(s) + 1));
+	if (ns == NULL)
 		return (NULL);
 
-	/* iterate str and assign rot13 char to nstr */
-	while (str[i] != '\0')
+	/* iterate s and assign rot13 char to ns */
+	while (s[i] != '\0')
 	{
-		if ((str[i] >= 'a' && str[i] <= 'm') || (str[i] >= 'A' && str[i] <= 'M'))
+		if ((s[i] >= 'a' && s[i] <= 'm') || (s[i] >= 'A' && s[i] <= 'M'))
 		{
-			nstr[i] = str[i] + 13;
+			ns[i] = s[i] + 13;
 		}
-		else if ((str[i] >= 'n' && str[i] <= 'z') || (str[i] >= 'N' && str[i] <= 'Z'))
+		else if ((s[i] >= 'n' && s[i] <= 'z') || (s[i] >= 'N' && s[i] <= 'Z'))
 		{
-			nstr[i] = str[i] - 13;
+			ns[i] = s[i] - 13;
 		}
 		else
-			(nstr[i] = str[i]);
+			(ns[i] = s[i]);
 		i++;
 	}
-	nstr[i] = '\0';
+	ns[i] = '\0';
 
-	return (nstr);
+	return (ns);
 }
