@@ -12,12 +12,12 @@ int print_rev(va_list params)
 	char *str = va_arg(params, char *);
 
 	if (!str)
-	str = "(null)";
+		str = ")llun(";
 
 	len = strlen(str) - 1;
 
 	for (count = len; str[count]; count--)
-	_putchar(str[count]);
+		_putchar(str[count]);
 
 	return (len);
 }
